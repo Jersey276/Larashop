@@ -10,21 +10,6 @@ import CardHeader from '@/components/ui/card/CardHeader.vue';
 import CardContent from '@/components/ui/card/CardContent.vue';
 import { ref } from 'vue';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/dashboard',
-    },
-    {
-        title: 'Categories',
-        href: route('admin.categories.index'),
-    },
-    {
-        title: 'Add Category',
-        href: route('admin.categories.add'),
-    },
-];
-
 const page = usePage();
 const formErrors = ref(page.props.errors || {});
 const categories = page.props.categories || [];
@@ -35,27 +20,40 @@ const formData = ref(page.props.category || {
     parent_id: null,
 });
 
-const submit = () => {
+const submit = async () => {
     if (formData.value.id) {
         // Update
-        router.put(route('api.categories.update', formData.value.id), formData.value, {
-            onError: (errors) => { formErrors.value = errors; },
-            onSuccess: () => {
-                formErrors.value = {};
-                router.visit(route('admin.categories.index'));
-            },
+        await fetch(`/api/categories/${formData.value.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData.value),
         });
     } else {
         // Create
-        router.post(route('api.categories.store'), formData.value, {
-            onError: (errors) => { formErrors.value = errors; },
-            onSuccess: () => {
-                formErrors.value = {};
-                router.visit(route('admin.categories.index'));
-            },
+        await fetch('/api/categories', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData.value),
         });
     }
+    // Redirige ensuite avec Inertia
+    router.visit(route('admin.categories.index'));
 };
+
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Dashboard',
+        href: route('admin.dashboard'),
+    },
+    {
+        title: 'Categories',
+        href: route('admin.categories.index'),
+    },
+    {
+        title: formData.id ? 'Modifier ' + formData.name : 'Nouveau Categorie',
+        href: route('admin.categories.add'),
+    },
+];
 </script>
 
 <template>

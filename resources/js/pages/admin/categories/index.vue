@@ -16,11 +16,11 @@ import { Link } from 'lucide-vue-next';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
-        href: '/dashboard',
+        href: route('admin.dashboard'),
     },
     {
         title: 'Categories',
-        href: '/categories',
+        href: route('admin.categories.index'),
     },
 ];
 
