@@ -9,20 +9,13 @@ use Inertia\Inertia;
 
 class CategoryController extends Controller
 {
-    public function index(?Category $category)
-    {
-        // Logic to display all categories
-        // This could be a list of categories with their products
-        return Inertia::render('category/index', [
-            'categories' => Category::when($category, fn($query) => $query->where('parent_id', $category->id))->get(),
-        ]);
-    }
-
-    public function show(Request $request, Category $category)
+    public function index(Category $category)
     {
         $products = $category->products()->paginate(10);
-        return Inertia::render('category/show', [
+        $children = $category->children()->get();
+        return Inertia::render('Category', [
             'category' => $category,
+            'children' => $children,
             'products' => $products,
         ]);
     }
@@ -53,16 +46,14 @@ class CategoryController extends Controller
 
     public function apiIndex(Request $request)
     {
-        $query = Category::query()->with('parentCategory');
+        $query = Category::query()->with('parent');
 
-        // Recherche
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%')
                 ->orWhere('description', 'like', '%' . $request->search . '%')
                 ->orWhere('id', $request->search);
         }
 
-        // Tri
         if ($request->filled('sort')) {
             $sortFields = explode(',', $request->sort);
             foreach ($sortFields as $sortField) {
@@ -72,11 +63,10 @@ class CategoryController extends Controller
             }
         }
 
-        // Pagination
         $perPage = $request->has('per_page') ? $request->per_page : 10;
         $categories = $query->select('id', 'name', 'description', 'parent_id')->paginate($perPage);
         $categories->getCollection()->transform(function ($category) {
-            $category->parent_name = $category->parentCategory ? $category->parentCategory->name : null;
+            $category->parent_name = $category->parent ? $category->parent->name : null;
             return $category;
         });
 

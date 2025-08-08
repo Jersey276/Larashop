@@ -29,24 +29,24 @@ const formData = ref(page.props.product || {
 
 const treeCategories = categories;
 
-const submit = () => {
+const submit = async () => {
     if (formData.value.id) {
-        router.put(`/api/products/${formData.value.id}`, formData.value, {
-            onError: (errors) => { formErrors.value = errors; },
-            onSuccess: () => {
-                formErrors.value = {};
-                router.visit(route('admin.products.index'));
-            },
+        // Update
+        await fetch(`/api/products/${formData.value.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData.value),
         });
     } else {
-        router.post('/api/products', formData.value, {
-            onError: (errors) => { formErrors.value = errors; },
-            onSuccess: () => {
-                formErrors.value = {};
-                router.visit(route('admin.products.index'));
-            },
+        // Create
+        await fetch('/api/products', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData.value),
         });
     }
+    // Redirige ensuite avec Inertia
+    router.visit(route('admin.products.index'));
 };
 
 const breadcrumbs: BreadcrumbItem[] = [
