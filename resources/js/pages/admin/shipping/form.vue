@@ -41,26 +41,24 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-const submit = () => {
+const submit = async () => {
     if (formData.value.id) {
         // Update
-        router.put(route('api.shipping.update', formData.value.id), formData.value, {
-            onError: (errors) => { formErrors.value = errors; },
-            onSuccess: () => {
-                formErrors.value = {};
-                router.visit(route('admin.shipping.index'));
-            },
+        await fetch(`/api/shipping/${formData.value.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData.value),
         });
     } else {
         // Create
-        router.post(route('api.shipping.store'), formData.value, {
-            onError: (errors) => { formErrors.value = errors; },
-            onSuccess: () => {
-                formErrors.value = {};
-                router.visit(route('admin.shipping.index'));
-            },
+        await fetch('/api/shipping', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData.value),
         });
     }
+    // Redirige ensuite avec Inertia
+    router.visit(route('admin.shipping.index'));
 };
 
 </script>
