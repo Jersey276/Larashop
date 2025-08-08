@@ -28,14 +28,14 @@ Route::middleware(['auth', 'verified', CheckIsAdmin::class])->prefix('admin')->g
     Route::prefix('orders')->controller(OrderController::class)->group(function () {
         Route::get('', 'adminIndex')->name('admin.orders.index');
     });
-    Route::prefix('users')->group(function () {
-        Route::get('/', [UserController::class, 'adminIndex'])->name('admin.users.index');
-        Route::get('/{user}', [UserController::class, 'adminView'])->name('admin.users.view');
+    Route::prefix('customers')->group(function () {
+        Route::get('/', [UserController::class, 'adminIndex'])->name('admin.customers.index');
+        Route::get('/{user}', [UserController::class, 'adminView'])->name('admin.customers.view');
     });
     //Route::get('/settings', [SettingsController::class, 'adminIndex'])->name('admin.settings.index');
 });
 // Customer Routes
-Route::middleware([CheckIsUser::class])->group(function () {
+Route::middleware([CheckIsUser::class, MainCategory::class])->group(function () {
     Route::get('/', function () {
         return Inertia::render('Welcome');
     })->name('home');

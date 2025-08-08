@@ -1,12 +1,16 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
+import { Head, usePage } from '@inertiajs/vue3';
 
 import AppearanceTabs from '@/components/AppearanceTabs.vue';
 import HeadingSmall from '@/components/HeadingSmall.vue';
-import { type BreadcrumbItem } from '@/types';
+import { User, type BreadcrumbItem } from '@/types';
 
 import AppLayout from '@/layouts/AppLayout.vue';
 import SettingsLayout from '@/layouts/settings/Layout.vue';
+import UserLayout from '@/layouts/UserLayout.vue';
+
+const page = usePage();
+const user = page.props.auth.user as User;
 
 const breadcrumbItems: BreadcrumbItem[] = [
     {
@@ -17,7 +21,7 @@ const breadcrumbItems: BreadcrumbItem[] = [
 </script>
 
 <template>
-    <AppLayout :breadcrumbs="breadcrumbItems">
+    <AppLayout v-if="user.is_admin" :breadcrumbs="breadcrumbItems">
         <Head title="Appearance settings" />
 
         <SettingsLayout>
@@ -27,4 +31,14 @@ const breadcrumbItems: BreadcrumbItem[] = [
             </div>
         </SettingsLayout>
     </AppLayout>
+    <UserLayout v-else>
+        <Head title="Appearance settings" />
+        
+        <SettingsLayout>
+            <div class="space-y-6">
+                <HeadingSmall title="Appearance settings" description="Update your account's appearance settings" />
+                <AppearanceTabs />
+            </div>
+        </SettingsLayout>
+    </UserLayout>
 </template>

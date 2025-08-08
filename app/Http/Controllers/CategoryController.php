@@ -9,6 +9,15 @@ use Inertia\Inertia;
 
 class CategoryController extends Controller
 {
+    public function index(?Category $category)
+    {
+        // Logic to display all categories
+        // This could be a list of categories with their products
+        return Inertia::render('category/index', [
+            'categories' => Category::when($category, fn($query) => $query->where('parent_id', $category->id))->get(),
+        ]);
+    }
+
     public function show(Request $request, Category $category)
     {
         $products = $category->products()->paginate(10);
@@ -48,7 +57,9 @@ class CategoryController extends Controller
 
         // Recherche
         if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
+            $query->where('name', 'like', '%' . $request->search . '%')
+                ->orWhere('description', 'like', '%' . $request->search . '%')
+                ->orWhere('id', $request->search);
         }
 
         // Tri
@@ -97,25 +108,25 @@ class CategoryController extends Controller
 
         return response()->json($products);
     }
-    
+
     public function apiStore(Request $request)
     {
         $categoryData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'parent_id' => ['nullable','exists:categories','id']
+            'parent_id' => ['nullable', 'exists:categories', 'id']
         ]);
 
         $category = Category::create($categoryData);
         return response()->json(['success' => true, 'category' => $category]);
     }
-    
+
     public function apiUpdate(Request $request, Category $category)
     {
         $categoryData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'parent_id' => ['nullable','exists:categories,id',function ($attribute, $value, $fail) use ($category) {
+            'parent_id' => ['nullable', 'exists:categories,id', function ($attribute, $value, $fail) use ($category) {
                 if ($value == $category->id) {
                     $fail('Une catégorie ne peut pas être son propre parent.');
                 }

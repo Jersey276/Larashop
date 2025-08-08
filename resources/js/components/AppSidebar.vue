@@ -16,19 +16,23 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Catégories',
-        href: '/admin/categories'
+        href: route('admin.categories.index'),
     },
     {
         title: 'Produits',
-        href:'/admin/products'
+        href: route('admin.products.index'),
+    },
+    {
+        title: 'Commandes',
+        href: route('admin.orders.index'),
     },
     {
         title: 'Clients',
-        href:'/admin/users'
+        href: route('admin.customers.index'),
     },
     {
         title: 'Transporteurs',
-        href:'/admin/shipping'
+        href: route('admin.shipping.index'),
     }
 ];
 
