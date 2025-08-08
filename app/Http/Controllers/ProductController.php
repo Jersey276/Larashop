@@ -57,14 +57,14 @@ class ProductController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'reference' => 'required|string|max:20|unique:products,reference',
             'price' => 'required|numeric|min:0',
-            'quantity' => 'required|integer|min:0',
-            'category_id' => 'required|exists:categories,id',
+            'stock' => 'required|integer|min:0',
             'sku' => 'required|string|max:255|unique:products,sku',
         ]);
 
         $product = Product::create($data);
-        return response()->json($product, 201);
+        return response()->json(['success' => true, 'product' => $product]);
     }
 
     public function apiUpdate(Request $request, Product $product)
@@ -72,14 +72,14 @@ class ProductController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'reference' => 'required|string|max:20|unique:products,reference',
             'price' => 'required|numeric|min:0',
-            'quantity' => 'required|integer|min:0',
-            'category_id' => 'required|exists:categories,id',
+            'stock' => 'required|integer|min:0',
             'sku' => 'required|string|max:255|unique:products,sku,' . $product->id,
         ]);
 
         $product->update($data);
-        return response()->json($product);
+        return response()->json(['success' => true, 'product' => $product]);
     }
 
 }
