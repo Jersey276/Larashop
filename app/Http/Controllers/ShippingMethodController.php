@@ -33,7 +33,7 @@ class ShippingMethodController extends Controller
     {
         // Logic to show form for editing an existing shipping method
         return Inertia::render('admin/shipping/form', [
-            'shippingMethod' => $shippingMethod,
+            'shipping' => $shippingMethod,
         ]);
     }
 

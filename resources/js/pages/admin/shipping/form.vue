@@ -9,19 +9,26 @@ import Card from '@/components/ui/card/Card.vue';
 import CardHeader from '@/components/ui/card/CardHeader.vue';
 import CardContent from '@/components/ui/card/CardContent.vue';
 import CardTitle from '@/components/ui/card/CardTitle.vue';
+
 import { ref } from 'vue';
+
+interface ShippingForm {
+    id: number | null;
+    name: string;
+    cost: number;
+    delivery_time: number;
+    is_active: boolean;
+}
 
 const page = usePage();
 const formErrors = ref(page.props.errors || {});
-const formData = ref(page.props.product || {
+
+const formData = ref<ShippingForm>((page.props.shipping as ShippingForm) || {
     id: null,
     name: '',
-    reference: '',
-    description: '',
-    sku: '',
-    price: 0.00,
-    stock: 0,
-    category_id: null,
+    cost: 0.00,
+    delivery_time: 0,
+    is_active: false,
 });
 
 
@@ -35,7 +42,7 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: route('admin.shipping.index'),
     },
     {
-        title: formData.id ? 'Modifier ' + formData.name : 'Nouveau Transporteur',
+        title: formData.value.id ? 'Modifier ' + formData.value.name : 'Nouveau Transporteur',
         href: route('api.shipping.store'),
     },
 ];
