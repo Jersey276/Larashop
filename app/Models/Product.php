@@ -18,7 +18,6 @@ class Product extends Model
         'reference',
         'stock',
         'sku',
-        'category_id',
         //'image',
     ];
     public function categories(): BelongsToMany

@@ -17,7 +17,7 @@ class MainCategory
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $categories = Category::with('childCategories')
+        $categories = Category::with('children')
             ->whereNull('parent_id')
             ->get(['id', 'name']);
 
