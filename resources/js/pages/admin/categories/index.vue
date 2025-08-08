@@ -1,17 +1,11 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { Head, usePage, router as $inertia } from '@inertiajs/vue3';
+import { Head, router as $inertia } from '@inertiajs/vue3';
 import DataTable from '@/components/DataTable.vue';
-import Sidebar from '@/components/ui/sidebar/Sidebar.vue';
-import SidebarHeader from '@/components/ui/sidebar/SidebarHeader.vue';
-import SidebarContent from '@/components/ui/sidebar/SidebarContent.vue';
-import SidebarFooter from '@/components/ui/sidebar/SidebarFooter.vue';
 import Card from '@/components/ui/card/Card.vue';
 import CardHeader from '@/components/ui/card/CardHeader.vue';
 import CardContent from '@/components/ui/card/CardContent.vue';
-import { ref } from 'vue';
-import { Link } from 'lucide-vue-next';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -23,10 +17,6 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: route('admin.categories.index'),
     },
 ];
-
-const page = usePage();
-
-const categories = page.props.categories || [];
 
 </script>
 <template>

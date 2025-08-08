@@ -11,7 +11,7 @@ class ShippingMethodController extends Controller
     public function apiIndex()
     {
         // Logic to display available shipping methods
-        $shippingMethods = currentUser()->shippingMethods;
+        $shippingMethods = ShippingMethod::paginate();
         return response()->json($shippingMethods);
     }
 

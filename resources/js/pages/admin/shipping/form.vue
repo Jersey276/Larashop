@@ -13,7 +13,6 @@ import { ref } from 'vue';
 
 const page = usePage();
 const formErrors = ref(page.props.errors || {});
-const categories = page.props.categories || [];
 const formData = ref(page.props.product || {
     id: null,
     name: '',

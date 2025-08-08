@@ -87,7 +87,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   props: {
     columns: {
@@ -115,7 +115,7 @@ export default {
   methods: {
     async fetchData() {
       const url = new URL(this.apiUrl);
-      url.searchParams.append('page', this.currentPage);
+      url.searchParams.append('page', `${this.currentPage}`);
       if (this.search) {
         url.searchParams.append('search', this.search);
       }
@@ -128,7 +128,7 @@ export default {
       this.data = result.data;
       this.totalPages = result.last_page;
     },
-    sortBy(field) {
+    sortBy(field:string) {
       if (this.sort === field) {
         this.sort = `-${field}`;
       } else {
@@ -140,7 +140,7 @@ export default {
       if (this.currentPage < this.totalPages) {
         this.currentPage++;
         this.fetchData();
-      }
+     }
     },
     prevPage() {
       if (this.currentPage > 1) {
@@ -148,7 +148,7 @@ export default {
         this.fetchData();
       }
     },
-    getChildren(item, field) {
+    getChildren(item: { [key: string]: any }, field: string) {
       return item[field] || [];
     },
   },
