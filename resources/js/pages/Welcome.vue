@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import UserLayout from '@/layouts/UserLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, usePage } from '@inertiajs/vue3';
+
+const page = usePage();
+const categories = page.props.categories;
+const products = page.props.products;
 </script>
 
 <template>
@@ -9,38 +13,20 @@ import { Head, Link } from '@inertiajs/vue3';
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
     </Head>
     <UserLayout>
-        <template #header>
-            <h1>Welcome to Our Shop</h1>
-        </template>
-    </UserLayout>
-    <div class="flex min-h-screen flex-col items-center bg-[#FDFDFC] p-6 text-[#1b1b18] lg:justify-center lg:p-8 dark:bg-[#0a0a0a]">
-        <header class="mb-6 w-full max-w-[335px] text-sm not-has-[nav]:hidden lg:max-w-4xl">
-            <nav class="flex items-center justify-end gap-4">
-                <Link
-                    v-if="$page.props.auth.user"
-                    href="#"
-                    class="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
-                >
-                    Dashboard
-                </Link>
-                <template v-else>
-                    <Link
-                        :href="route('login')"
-                        class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]"
-                    >
-                        Log in
-                    </Link>
-                    <Link
-                        :href="route('register')"
-                        class="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
-                    >
-                        Register
-                    </Link>
-                </template>
-            </nav>
-        </header>
-        <div class="flex w-full items-center justify-center opacity-100 transition-opacity duration-750 lg:grow starting:opacity-0">
+        <div class="flex h-full flex-1 flex-col gap-8 rounded-xl p-4 overflow-x-auto">
+            <div class="w-full">
+                <h2 class="text-xl font-bold mb-2">Catégories</h2>
+                <div class="flex flex-wrap gap-4">
+                    <div v-for="category in categories" :key="category.id" class="w-32 border rounded p-4 text-center my-2">
+                        <a :href="route('products.index', category.name)" class="block py-2">
+                            {{ category.name }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full">
+                <h2 class="text-xl font-bold mb-2">Derniers produits</h2>
+            </div>
         </div>
-        <div class="hidden h-14.5 lg:block"></div>
-    </div>
+    </UserLayout>
 </template>
