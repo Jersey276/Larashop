@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Settings\ProfileController;
@@ -43,9 +44,7 @@ Route::middleware(['auth', 'verified', CheckIsAdmin::class])->prefix('admin')->g
 });
 // Customer Routes
 Route::middleware([CheckIsUser::class, MainCategory::class])->group(function () {
-    Route::get('/', function () {
-        return Inertia::render('Welcome');
-    })->name('home');
+    Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::prefix('category')->controller(CategoryController::class)->group(function () {
         Route::get('/{name}', 'index')->name('products.index');
     });
