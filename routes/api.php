@@ -4,6 +4,7 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ShippingMethodController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,12 @@ Route::controller(ProductController::class)->prefix('products')->group(function 
     Route::get('/{product}', 'apiView')->name('api.products.view');
     Route::post('/', 'apiStore')->name('api.products.store');
     Route::put('/{product}', 'apiUpdate')->name('api.products.update');
+});
+Route::controller(ShippingMethodController::class)->prefix('shipping')->group(function () {
+    Route::get('/', 'apiIndex')->name('api.shipping.index');
+    Route::get('/{shippingMethod}', 'apiView')->name('api.shipping.view');
+    Route::post('/', 'apiStore')->name('api.shipping.store');
+    Route::put('/{shippingMethod}', 'apiUpdate')->name('api.shipping.update');
 });
 Route::get('/addresses', [AddressController::class, 'apiIndex'])->name('api.addresses.index');
 Route::get('/orders', [OrderController::class, 'apiIndex'])->name('api.orders.index');

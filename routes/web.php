@@ -4,9 +4,11 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Settings\ProfileController;
+use App\Http\Controllers\ShippingMethodController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckIsAdmin;
 use App\Http\Middleware\CheckIsUser;
+use App\Http\Middleware\MainCategory;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -27,6 +29,11 @@ Route::middleware(['auth', 'verified', CheckIsAdmin::class])->prefix('admin')->g
     });
     Route::prefix('orders')->controller(OrderController::class)->group(function () {
         Route::get('', 'adminIndex')->name('admin.orders.index');
+    });
+    Route::prefix('shipping')->controller(ShippingMethodController::class)->group(function () {
+        Route::get('', 'adminIndex')->name('admin.shipping.index');
+        Route::get('add', 'adminAdd')->name('admin.shipping.add');
+        Route::get('{shipping}/edit', 'adminEdit')->name('admin.shipping.edit');
     });
     Route::prefix('customers')->group(function () {
         Route::get('/', [UserController::class, 'adminIndex'])->name('admin.customers.index');
