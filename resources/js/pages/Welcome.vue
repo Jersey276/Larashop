@@ -4,7 +4,6 @@ import { Head, usePage } from '@inertiajs/vue3';
 
 const page = usePage();
 const categories = page.props.categories;
-const products = page.props.products;
 </script>
 
 <template>

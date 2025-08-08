@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { Head, usePage, router as $inertia } from '@inertiajs/vue3';
+import { Head, router as $inertia } from '@inertiajs/vue3';
 import DataTable from '@/components/DataTable.vue';
 import Card from '@/components/ui/card/Card.vue';
 import CardHeader from '@/components/ui/card/CardHeader.vue';
@@ -17,10 +17,6 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: route('admin.products.index'),
     },
 ];
-
-const page = usePage();
-
-const products = page.props.products || [];
 
 </script>
 <template>
