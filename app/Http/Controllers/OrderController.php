@@ -22,10 +22,4 @@ class OrderController extends Controller
             'orders' => $orders,
         ]);
     }
-
-    public function checkout()
-    {
-        // Logic to handle checkout process
-        return Inertia::render('checkout');
-    }
 }
