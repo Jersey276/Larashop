@@ -60,6 +60,7 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'quantity' => 'required|integer|min:0',
             'category_id' => 'required|exists:categories,id',
+            'sku' => 'required|string|max:255|unique:products,sku',
         ]);
 
         $product = Product::create($data);
@@ -74,6 +75,7 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'quantity' => 'required|integer|min:0',
             'category_id' => 'required|exists:categories,id',
+            'sku' => 'required|string|max:255|unique:products,sku,' . $product->id,
         ]);
 
         $product->update($data);
