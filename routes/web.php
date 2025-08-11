@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckIsAdmin;
 use App\Http\Middleware\CheckIsUser;
 use App\Http\Middleware\MainCategory;
+use App\Http\Middleware\ShareCart;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -42,6 +43,7 @@ Route::middleware(['auth', 'verified', CheckIsAdmin::class])->prefix('admin')->g
     });
     //Route::get('/settings', [SettingsController::class, 'adminIndex'])->name('admin.settings.index');
 });
+Route::middleware(ShareCart::class)->group(function () {
 // Customer Routes
 Route::middleware([CheckIsUser::class, MainCategory::class])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -56,6 +58,7 @@ Route::middleware('auth', 'verified')->group(function () {
         Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
+});
 });
 
 
