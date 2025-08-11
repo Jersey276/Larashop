@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
@@ -31,5 +32,11 @@ Route::prefix('categories')->group(function () {
         Route::post('/', 'apiStore')->name('api.categories.store');
         Route::put('/{category}', 'apiUpdate')->name('api.categories.update');
     });
+});
+Route::controller(CartController::class)->group(function () {
+    Route::get('/cart', 'index')->name('api.cart.index');
+    Route::post('/cart/add', 'add')->name('api.cart.add');
+    Route::put('/cart/update', 'update')->name('api.cart.update');
+    Route::delete('/cart/remove/{product}', 'remove')->name('api.cart.remove');
 });
 

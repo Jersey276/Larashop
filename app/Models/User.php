@@ -62,6 +62,11 @@ class User extends Authenticatable
         return $this->hasMany(Cart::class);
     }
 
+    public function lastCart(): ?Cart
+    {
+        return $this->carts(Cart::class)->doesntHave('order')->latest();
+    }
+
     public function addresses(): HasMany
     {
         return $this->hasMany(Address::class);

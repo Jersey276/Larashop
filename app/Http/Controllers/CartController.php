@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class CartController extends Controller
 {
@@ -14,19 +16,37 @@ class CartController extends Controller
 
     public function add(Request $request)
     {
-        $item = $request->input('item');
-        currentUser()->cartItems()->attach($item);
-        return redirect()->route('cart.index')->with('success', 'Item added to cart.');
+        $validate = $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'quantity' => 'required|integer|min:1',
+        ]);
+        $product = Product::find($validate['product_id']);
+        if (currentUser()->lastCart()->exists()) {
+            $cart = currentUser()->lastCart;
+        } else {
+            $cart = currentUser()->carts()->create();
+        }
+        if (($item = $cart->items()->where('product_id', $request->product_id))->exists()) {
+            $item->increment('quantity', $request->quantity);
+            $item->increment('price', $product->price * $request->quantity);
+        } else {
+            $item = $cart->items()->create([
+                'product_id' => $request->product_id,
+                'quantity' => $request->quantity,
+                'price' => $product->price * $request->quantity,
+            ]);
+        }
+        return response()->json(['success' => true]);
     }
     public function remove(Request $request, $itemId)
     {
         currentUser()->cartItems()->detach($itemId);
-        return redirect()->route('cart.index')->with('success', 'Item removed from cart.');
+        return response()->json(['success' => true]);
     }
     public function clear()
     {
         currentUser()->cartItems()->detach();
-        return redirect()->route('cart.index')->with('success', 'Cart cleared.');
+        return response()->json(['success' => true]);
     }
 
     public function checkout()

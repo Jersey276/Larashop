@@ -12,11 +12,18 @@ import Avatar from '../ui/avatar/Avatar.vue';
 import AvatarImage from '../ui/avatar/AvatarImage.vue';
 import AvatarFallback from '../ui/avatar/AvatarFallback.vue';
 
+import CartSidebar from '@/components/CartSidebar.vue';
+import { useCart } from '@/composables/useCart';
+
 const page = usePage();
 const auth = computed(() => page.props.auth);
 const categories = page.props.mainCategories;
 
-console.log(categories);
+const { cart, sidebarVisible, showSidebar, hideSidebar, cartEnabled } = useCart();
+function handleCheckout() {
+    window.location.href = '/cart/checkout';
+}
+
 </script>
 
 <template>
@@ -55,38 +62,50 @@ console.log(categories);
                 </div>
             </template>
         </nav>
-        <DropdownMenu>
-            <DropdownMenuTrigger :as-child="true">
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    class="relative size-10 w-auto rounded-full p-1 focus-within:ring-2 focus-within:ring-primary"
-                >
-                    <Avatar class="size-8 overflow-hidden rounded-full">
-                        <template v-if="$page.props.auth.user">
-                        <AvatarImage v-if="auth.user.avatar" :src="auth.user.avatar" :alt="auth.user.name" />
-                        <AvatarFallback class="rounded-lg bg-neutral-200 font-semibold text-black dark:bg-neutral-700 dark:text-white">
-                            {{ getInitials(auth.user?.name) }}
-                        </AvatarFallback>
-                        </template>
-                        <template v-else>
-                            <AvatarImage :src="'/default-avatar.png'" :alt="'Guest'" />
+        <div class="flex items-center gap-2">
+            <button v-if="cartEnabled" @click="showSidebar" class="relative px-3 py-2 font-medium hover:bg-accent rounded">
+                Panier
+                <span v-if="cart.length" class="absolute top-0 right-0 bg-blue-500 text-white text-xs rounded-full px-1">{{ cart.length }}</span>
+            </button>
+            <CartSidebar
+                :cart="cart"
+                :visible="sidebarVisible"
+                @close="hideSidebar"
+                @checkout="handleCheckout"
+            />
+            <DropdownMenu>
+                <DropdownMenuTrigger :as-child="true">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        class="relative size-10 w-auto rounded-full p-1 focus-within:ring-2 focus-within:ring-primary"
+                    >
+                        <Avatar class="size-8 overflow-hidden rounded-full">
+                            <template v-if="$page.props.auth.user">
+                            <AvatarImage v-if="auth.user.avatar" :src="auth.user.avatar" :alt="auth.user.name" />
                             <AvatarFallback class="rounded-lg bg-neutral-200 font-semibold text-black dark:bg-neutral-700 dark:text-white">
-                                G
+                                {{ getInitials(auth.user?.name) }}
                             </AvatarFallback>
-                        </template>
-                    </Avatar>
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" class="w-56">
-                <template v-if="$page.props.auth.user">
-                    <UserMenuContent :user="auth.user" />
-                </template>
-                <template v-else>
-                    <a href="/login" class="block px-4 py-2 hover:bg-accent">Se connecter</a>
-                    <a href="/register" class="block px-4 py-2 hover:bg-accent">S'inscrire</a>
-                </template>
-            </DropdownMenuContent>
-        </DropdownMenu>
+                            </template>
+                            <template v-else>
+                                <AvatarImage :src="'/default-avatar.png'" :alt="'Guest'" />
+                                <AvatarFallback class="rounded-lg bg-neutral-200 font-semibold text-black dark:bg-neutral-700 dark:text-white">
+                                    G
+                                </AvatarFallback>
+                            </template>
+                        </Avatar>
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" class="w-56">
+                    <template v-if="$page.props.auth.user">
+                        <UserMenuContent :user="auth.user" />
+                    </template>
+                    <template v-else>
+                        <a href="/login" class="block px-4 py-2 hover:bg-accent">Se connecter</a>
+                        <a href="/register" class="block px-4 py-2 hover:bg-accent">S'inscrire</a>
+                    </template>
+                </DropdownMenuContent>
+            </DropdownMenu>
+        </div>
     </header>
 </template>
