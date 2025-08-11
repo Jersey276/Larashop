@@ -43,7 +43,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
     {
         title: formData.value.id ? 'Modifier ' + formData.value.name : 'Nouveau Transporteur',
-        href: route('api.shipping.store'),
+        href: formData.value.id ? route('admin.shipping.edit', { shipping: formData.value.id }) : route('admin.shipping.add'),
     },
 ];
 
