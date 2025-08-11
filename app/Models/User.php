@@ -64,7 +64,7 @@ class User extends Authenticatable
 
     public function lastCart(): ?Cart
     {
-        return $this->carts(Cart::class)->doesntHave('order')->latest();
+        return $this->carts(Cart::class)->doesntHave('order')->latest()->first();
     }
 
     public function addresses(): HasMany
