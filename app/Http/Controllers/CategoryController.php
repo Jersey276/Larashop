@@ -9,12 +9,12 @@ use Inertia\Inertia;
 
 class CategoryController extends Controller
 {
-    public function index(string $name)
+    public function view(string $category)
     {
-        $category = Category::where('name', $name)->firstOrFail();
+        $category = Category::where('uri', $category)->firstOrFail();
         $products = $category->products()->paginate(10);
         $children = $category->children()->get();
-        return Inertia::render('Category', [
+        return Inertia::render('products/index', [
             'category' => $category,
             'children' => $children,
             'products' => $products,
@@ -104,6 +104,13 @@ class CategoryController extends Controller
     {
         $categoryData = $request->validate([
             'name' => 'required|string|max:255',
+            'uri' => [
+                'required',
+                'string',
+                'max:255',
+                'unique:categories,uri',
+                'regex:/^[a-z0-9-]+$/',
+            ],
             'description' => 'nullable|string',
             'parent_id' => ['nullable', 'exists:categories', 'id']
         ]);
@@ -116,6 +123,13 @@ class CategoryController extends Controller
     {
         $categoryData = $request->validate([
             'name' => 'required|string|max:255',
+            'uri' => [
+                'required',
+                'string',
+                'max:255',
+                'unique:categories,uri,' . $category->id,
+                'regex:/^[a-z0-9-]+$/',
+            ],
             'description' => 'nullable|string',
             'parent_id' => ['nullable', 'exists:categories,id', function ($attribute, $value, $fail) use ($category) {
                 if ($value == $category->id) {

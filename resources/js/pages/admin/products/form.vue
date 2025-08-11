@@ -17,6 +17,7 @@ const formErrors = ref(page.props.errors || {});
 const categories = page.props.categories || [];
 const formData = ref(page.props.product || {
     id: null,
+    uri: '',
     name: '',
     reference: '',
     description: '',
@@ -112,6 +113,11 @@ const breadcrumbs: BreadcrumbItem[] = [
                                     <label for="stock" class="block text-sm font-medium text-gray-700">stock</label>
                                     <input v-model="formData.stock" type="number" id="stock" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" required />
                                     <p v-if="formErrors.stock" class="mt-2 text-sm text-red-600">{{ formErrors.stock }}</p>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="uri" class="block text-sm font-medium text-gray-700">Slug</label>
+                                    <input v-model="formData.uri" type="text" id="uri" placeholder="slug" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" required />
+                                    <p v-if="formErrors.uri" class="mt-2 text-sm text-red-600">{{ formErrors.uri }}</p>
                                 </div>
                             </div>
                             

@@ -13,7 +13,7 @@ class Category extends Model
     /** @use HasFactory<\Database\Factories\CategoryFactory> */
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'parent_id'];
+    protected $fillable = ['name', 'uri', 'description', 'parent_id'];
 
     public function products(): BelongsToMany
     {

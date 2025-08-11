@@ -16,6 +16,7 @@ const categories = page.props.categories || [];
 const formData = ref(page.props.category || {
     id: null,
     name: '',
+    uri: '',
     description: '',
     parent_id: null,
 });
@@ -79,6 +80,11 @@ const breadcrumbs: BreadcrumbItem[] = [
                                 <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
                                 <textarea v-model="formData.description" id="description" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
                                 <p v-if="formErrors.description" class="mt-2 text-sm text-red-600">{{ formErrors.description }}</p>
+                            </div>
+                            <div class="mb-4">
+                                <label for="uri" class="block text-sm font-medium text-gray-700">Slug</label>
+                                <input v-model="formData.uri" type="text" id="uri" placeholder="slug" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" required />
+                                <p v-if="formErrors.uri" class="mt-2 text-sm text-red-600">{{ formErrors.uri }}</p>
                             </div>
                             <div class="mb-4">
                                 <label for="parent_id" class="block text-sm font-medium text-gray-700">Parent Category</label>

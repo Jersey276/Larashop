@@ -9,10 +9,10 @@ use Inertia\Inertia;
 
 class ProductController extends Controller
 {
-    public function view(Product $product)
+    public function view(string $category, string $product)
     {
         return Inertia::render('products/view', [
-            'product' => $product,
+            'product' => Product::where('uri', $product)->firstOrFail(),
         ]);
     }
 
@@ -71,6 +71,13 @@ class ProductController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
+            'uri' => [
+                'required',
+                'string',
+                'max:255',
+                'unique:products,uri',
+                'regex:/^[a-z0-9-]+$/',
+            ],
             'description' => 'nullable|string',
             'reference' => 'required|string|max:20|unique:products,reference',
             'price' => 'required|numeric|min:0',
@@ -93,6 +100,13 @@ class ProductController extends Controller
     {
             $data = $request->validate([
                 'name' => 'required|string|max:255',
+                'uri' => [
+                    'required',
+                    'string',
+                    'max:255',
+                    'unique:products,uri,' . $product->id,
+                    'regex:/^[a-z0-9-]+$/',
+                ],
                 'description' => 'nullable|string',
                 'reference' => 'required|string|max:20|unique:products,reference,' . $product->id,
                 'price' => 'required|numeric|min:0',

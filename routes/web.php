@@ -45,11 +45,9 @@ Route::middleware(['auth', 'verified', CheckIsAdmin::class])->prefix('admin')->g
 // Customer Routes
 Route::middleware([CheckIsUser::class, MainCategory::class])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
-    Route::prefix('category')->controller(CategoryController::class)->group(function () {
-        Route::get('/{name}', 'index')->name('products.index');
-    });
-    Route::prefix('products')->controller(ProductController::class)->group(function () {
-        Route::get('/{product}', 'view')->name('products.view');
+    Route::prefix('category')->group(function () {
+        Route::get('/{category}', [CategoryController::class,'view'])->name('products.index');
+        Route::get('/{category}/{product}', [ProductController::class,'view'])->name('products.view');
     });
 });
 Route::middleware('auth', 'verified')->group(function () {
