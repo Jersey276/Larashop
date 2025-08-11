@@ -53,6 +53,7 @@ const submit = async () => {
         await fetch(`/api/shipping/${formData.value.id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
             body: JSON.stringify(formData.value),
         });
     } else {
@@ -60,6 +61,7 @@ const submit = async () => {
         await fetch('/api/shipping', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
             body: JSON.stringify(formData.value),
         });
     }

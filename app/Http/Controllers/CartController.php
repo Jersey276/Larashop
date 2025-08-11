@@ -21,9 +21,8 @@ class CartController extends Controller
             'quantity' => 'required|integer|min:1',
         ]);
         $product = Product::find($validate['product_id']);
-        if (currentUser()->lastCart()->exists()) {
-            $cart = currentUser()->lastCart;
-        } else {
+        $cart = currentUser()->lastCart();
+        if (!$cart) {
             $cart = currentUser()->carts()->create();
         }
         if (($item = $cart->items()->where('product_id', $request->product_id))->exists()) {

@@ -36,6 +36,7 @@ const submit = async () => {
         await fetch(`/api/products/${formData.value.id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
             body: JSON.stringify(formData.value),
         });
     } else {
@@ -43,6 +44,7 @@ const submit = async () => {
         await fetch('/api/products', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
             body: JSON.stringify(formData.value),
         });
     }
