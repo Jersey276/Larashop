@@ -9,8 +9,9 @@ use Inertia\Inertia;
 
 class CategoryController extends Controller
 {
-    public function index(Category $category)
+    public function index(string $name)
     {
+        $category = Category::where('name', $name)->firstOrFail();
         $products = $category->products()->paginate(10);
         $children = $category->children()->get();
         return Inertia::render('Category', [
